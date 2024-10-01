@@ -1103,7 +1103,7 @@ mod tests {
             "日本語とEnglishの混在した文章".into(),
             TextFormat::default(),
         );
-        layout_job.wrap.max_width = 90.0;
+        layout_job.wrap.max_width = 100.0;
         let galley = layout(&mut fonts, layout_job.into());
         assert_eq!(
             galley.rows.iter().map(|row| row.text()).collect::<Vec<_>>(),
