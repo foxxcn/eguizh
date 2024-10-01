@@ -7,15 +7,9 @@
 [![Build Status](https://github.com/emilk/egui/workflows/CI/badge.svg)](https://github.com/emilk/egui/actions?workflow=CI)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/emilk/egui/blob/master/LICENSE-MIT)
 [![Apache](https://img.shields.io/badge/license-Apache-blue.svg)](https://github.com/emilk/egui/blob/master/LICENSE-APACHE)
-[![Discord](https://img.shields.io/discord/900275882684477440?label=egui%20discord)](https://discord.gg/JFcEma9bJq)
 
 
-<div align="center">
-<a href="https://www.rerun.io/"><img src="media/rerun_io_logo.png" width="250"></a>
 
-egui development is sponsored by [Rerun](https://www.rerun.io/), a startup building<br>
-an SDK for visualizing streams of multimodal data.
-</div>
 
 ---
 
@@ -72,7 +66,6 @@ There are simple examples in [the `examples/` folder](https://github.com/emilk/e
 
 If you want to integrate egui into an existing engine, go to the [Integrations](#integrations) section.
 
-If you have questions, use [GitHub Discussions](https://github.com/emilk/egui/discussions). There is also [an egui discord server](https://discord.gg/JFcEma9bJq). If you want to contribute to egui, please read the [Contributing Guidelines](https://github.com/emilk/egui/blob/master/CONTRIBUTING.md).
 
 ## Demo
 
@@ -117,7 +110,6 @@ egui is *not* a framework. egui is a library you call into, not an environment y
 
 egui is in active development. It works well for what it does, but it lacks many features and the interfaces are still in flux. New releases will have breaking changes.
 
-Still, egui can be used to create professional looking applications, like [the Rerun Viewer](https://app.rerun.io/).
 
 ### Features
 
@@ -393,9 +385,3 @@ Default fonts:
 
 ---
 
-<div align="center">
-<a href="https://www.rerun.io/"><img src="media/rerun_io_logo.png" width="440"></a>
-
-egui development is sponsored by [Rerun](https://www.rerun.io/), a startup building<br>
-an SDK for visualizing streams of multimodal data.
-</div>
