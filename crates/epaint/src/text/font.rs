@@ -160,7 +160,7 @@ impl FontImpl {
             // Strip out a religious symbol with secondary nefarious interpretation:
             '\u{534d}' | '\u{5350}' |
 
-            // Ignore ubuntu-specific stuff in `Ubuntu-Light.ttf`:
+            // Ignore ubuntu-specific stuff in `SourceHanSerifCN-VF.ttf`:
             '\u{E0FF}' | '\u{EFFD}' | '\u{F0FF}' | '\u{F200}'
         )
     }

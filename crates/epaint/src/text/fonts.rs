@@ -11,7 +11,7 @@ use crate::{
 use emath::{NumExt as _, OrderedFloat};
 
 #[cfg(feature = "default_fonts")]
-use epaint_default_fonts::{EMOJI_ICON, HACK_REGULAR, NOTO_EMOJI_REGULAR, UBUNTU_LIGHT};
+use epaint_default_fonts::{EMOJI_ICON, NOTO_EMOJI_REGULAR, SOURCECODEPRO_REGULAR, SOURCEHANCN_VF};
 
 // ----------------------------------------------------------------------------
 
@@ -224,7 +224,7 @@ fn ab_glyph_font_from_font_data(name: &str, data: &FontData) -> ab_glyph::FontAr
 ///
 /// // Install my own font (maybe supporting non-latin characters):
 /// fonts.font_data.insert("my_font".to_owned(),
-///    FontData::from_static(include_bytes!("../../../epaint_default_fonts/fonts/Ubuntu-Light.ttf"))); // .ttf and .otf supported
+///    FontData::from_static(include_bytes!("../../../epaint_default_fonts/fonts/SourceHanSerifCN-VF.ttf"))); // .ttf and .otf supported
 ///
 /// // Put my font first (highest priority):
 /// fonts.families.get_mut(&FontFamily::Proportional).unwrap()
@@ -270,7 +270,10 @@ impl Default for FontDefinitions {
 
         let mut families = BTreeMap::new();
 
-        font_data.insert("Hack".to_owned(), FontData::from_static(HACK_REGULAR));
+        font_data.insert(
+            "SourceCodePro".to_owned(),
+            FontData::from_static(SOURCECODEPRO_REGULAR),
+        );
 
         // Some good looking emojis. Use as first priority:
         font_data.insert(
@@ -282,8 +285,8 @@ impl Default for FontDefinitions {
         );
 
         font_data.insert(
-            "Ubuntu-Light".to_owned(),
-            FontData::from_static(UBUNTU_LIGHT),
+            "SourceHanCN-VF".to_owned(),
+            FontData::from_static(SOURCEHANCN_VF),
         );
 
         // Bigger emojis, and more. <http://jslegers.github.io/emoji-icon-font/>:
@@ -298,8 +301,8 @@ impl Default for FontDefinitions {
         families.insert(
             FontFamily::Monospace,
             vec![
-                "Hack".to_owned(),
-                "Ubuntu-Light".to_owned(), // fallback for √ etc
+                "SourceCodePro".to_owned(),
+                "SourceHanCN-VF".to_owned(), // fallback for √ etc
                 "NotoEmoji-Regular".to_owned(),
                 "emoji-icon-font".to_owned(),
             ],
@@ -307,7 +310,7 @@ impl Default for FontDefinitions {
         families.insert(
             FontFamily::Proportional,
             vec![
-                "Ubuntu-Light".to_owned(),
+                "SourceHanCN-VF".to_owned(),
                 "NotoEmoji-Regular".to_owned(),
                 "emoji-icon-font".to_owned(),
             ],
@@ -337,10 +340,10 @@ impl FontDefinitions {
     #[cfg(feature = "default_fonts")]
     pub fn builtin_font_names() -> &'static [&'static str] {
         &[
-            "Ubuntu-Light",
+            "SourceHanCN-VF",
             "NotoEmoji-Regular",
             "emoji-icon-font",
-            "Hack",
+            "SourceCodePro",
         ]
     }
 

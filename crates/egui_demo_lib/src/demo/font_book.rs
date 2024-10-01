@@ -231,7 +231,7 @@ fn special_char_name(chr: char) -> Option<&'static str> {
         '\u{F1CA}' => Some("web-vine"),
         '\u{F8FF}' => Some("os-apple"),
 
-        // Special private-use-area extensions found in `Ubuntu-Light.ttf`
+        // Special private-use-area extensions found in `SourceHanSerifCN-VF.ttf`
         '\u{F000}' => Some("uniF000"),
         '\u{F001}' => Some("fi"),
         '\u{F002}' => Some("fl"),
