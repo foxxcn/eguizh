@@ -387,9 +387,9 @@ egui is licensed under [MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE).
 Default fonts:
 
 * `emoji-icon-font.ttf`: [Copyright (c) 2014 John Slegers](https://github.com/jslegers/emoji-icon-font) , MIT License
-* `Hack-Regular.ttf`: <https://github.com/source-foundry/Hack>, [MIT Licence](https://github.com/source-foundry/Hack/blob/master/LICENSE.md)
+* `SourceCodePro-Regular.ttf`: <https://github.com/adobe-fonts/source-code-pro>, [SIL Open Font License](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
 * `NotoEmoji-Regular.ttf`: [google.com/get/noto](https://google.com/get/noto), [SIL Open Font License](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
-* `Ubuntu-Light.ttf` by [Dalton Maag](http://www.daltonmaag.com/): [Ubuntu font licence](https://ubuntu.com/legal/font-licence)
+* `SourceHanSerifCN-VF.ttf OR SourceHanSansCN-VF.ttf`:<https://github.com/adobe-fonts/source-han-sans>, [SIL Open Font License](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
 
 ---
 
