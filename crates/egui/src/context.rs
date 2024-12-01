@@ -9,7 +9,7 @@ use epaint::{
     pos2,
     stats::PaintStats,
     tessellator,
-    text::Fonts,
+    text::{FontInsert, FontPriority, Fonts},
     util::OrderedFloat,
     vec2, ClippedPrimitive, ClippedShape, Color32, ImageData, ImageDelta, Pos2, Rect,
     TessellationOptions, TextureAtlas, TextureId, Vec2,
@@ -552,13 +552,13 @@ impl ContextImpl {
             crate::profile_scope!("accesskit");
             use crate::pass_state::AccessKitPassState;
             let id = crate::accesskit_root_id();
-            let mut builder = accesskit::NodeBuilder::new(accesskit::Role::Window);
+            let mut root_node = accesskit::Node::new(accesskit::Role::Window);
             let pixels_per_point = viewport.input.pixels_per_point();
-            builder.set_transform(accesskit::Affine::scale(pixels_per_point.into()));
-            let mut node_builders = IdMap::default();
-            node_builders.insert(id, builder);
+            root_node.set_transform(accesskit::Affine::scale(pixels_per_point.into()));
+            let mut nodes = IdMap::default();
+            nodes.insert(id, root_node);
             viewport.this_pass.accesskit_state = Some(AccessKitPassState {
-                node_builders,
+                nodes,
                 parent_stack: vec![id],
             });
         }
@@ -580,6 +580,30 @@ impl ContextImpl {
             self.font_definitions = font_definitions;
             #[cfg(feature = "log")]
             log::trace!("Loading new font definitions");
+        }
+
+        if !self.memory.add_fonts.is_empty() {
+            let fonts = self.memory.add_fonts.drain(..);
+            for font in fonts {
+                self.fonts.clear(); // recreate all the fonts
+                for family in font.families {
+                    let fam = self
+                        .font_definitions
+                        .families
+                        .entry(family.family)
+                        .or_default();
+                    match family.priority {
+                        FontPriority::Highest => fam.insert(0, font.name.clone()),
+                        FontPriority::Lowest => fam.push(font.name.clone()),
+                    }
+                }
+                self.font_definitions
+                    .font_data
+                    .insert(font.name, Arc::new(font.data));
+            }
+
+            #[cfg(feature = "log")]
+            log::trace!("Adding new fonts");
         }
 
         let mut is_new = false;
@@ -616,9 +640,9 @@ impl ContextImpl {
     }
 
     #[cfg(feature = "accesskit")]
-    fn accesskit_node_builder(&mut self, id: Id) -> &mut accesskit::NodeBuilder {
+    fn accesskit_node_builder(&mut self, id: Id) -> &mut accesskit::Node {
         let state = self.viewport().this_pass.accesskit_state.as_mut().unwrap();
-        let builders = &mut state.node_builders;
+        let builders = &mut state.nodes;
         if let std::collections::hash_map::Entry::Vacant(entry) = builders.entry(id) {
             entry.insert(Default::default());
             let parent_id = state.parent_stack.last().unwrap();
@@ -1136,6 +1160,9 @@ impl Context {
     /// same widget, then `allow_focus` should only be true once (like in [`Ui::new`] (true) and [`Ui::remember_min_rect`] (false)).
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn create_widget(&self, w: WidgetRect, allow_focus: bool) -> Response {
+        let interested_in_focus =
+            w.enabled && w.sense.focusable && self.memory(|mem| mem.allows_interaction(w.layer_id));
+
         // Remember this widget
         self.write(|ctx| {
             let viewport = ctx.viewport();
@@ -1145,12 +1172,12 @@ impl Context {
             // but also to know when we have reached the widget we are checking for cover.
             viewport.this_pass.widgets.insert(w.layer_id, w);
 
-            if allow_focus && w.sense.focusable {
-                ctx.memory.interested_in_focus(w.id);
+            if allow_focus && interested_in_focus {
+                ctx.memory.interested_in_focus(w.id, w.layer_id);
             }
         });
 
-        if allow_focus && (!w.enabled || !w.sense.focusable || !w.layer_id.allow_interaction()) {
+        if allow_focus && !interested_in_focus {
             // Not interested or allowed input:
             self.memory_mut(|mem| mem.surrender_focus(w.id));
         }
@@ -1255,7 +1282,7 @@ impl Context {
             #[cfg(feature = "accesskit")]
             if enabled
                 && sense.click
-                && input.has_accesskit_action_request(id, accesskit::Action::Default)
+                && input.has_accesskit_action_request(id, accesskit::Action::Click)
             {
                 res.fake_primary_click = true;
             }
@@ -1416,6 +1443,10 @@ impl Context {
     /// Copy the given text to the system clipboard.
     ///
     /// Empty strings are ignored.
+    ///
+    /// Note that in wasm applications, the clipboard is only accessible in secure contexts (e.g.,
+    /// HTTPS or localhost). If this method is used outside of a secure context, it will log an
+    /// error and do nothing. See <https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts>.
     ///
     /// Equivalent to:
     /// ```
@@ -1727,6 +1758,7 @@ impl Context {
     /// but you can call this to install additional fonts that support e.g. korean characters.
     ///
     /// The new fonts will become active at the start of the next pass.
+    /// This will overwrite the existing fonts.
     pub fn set_fonts(&self, font_definitions: FontDefinitions) {
         crate::profile_function!();
 
@@ -1745,6 +1777,39 @@ impl Context {
 
         if update_fonts {
             self.memory_mut(|mem| mem.new_font_definitions = Some(font_definitions));
+        }
+    }
+
+    /// Tell `egui` which fonts to use.
+    ///
+    /// The default `egui` fonts only support latin and cyrillic alphabets,
+    /// but you can call this to install additional fonts that support e.g. korean characters.
+    ///
+    /// The new font will become active at the start of the next pass.
+    /// This will keep the existing fonts.
+    pub fn add_font(&self, new_font: FontInsert) {
+        crate::profile_function!();
+
+        let pixels_per_point = self.pixels_per_point();
+
+        let mut update_fonts = true;
+
+        self.read(|ctx| {
+            if let Some(current_fonts) = ctx.fonts.get(&pixels_per_point.into()) {
+                if current_fonts
+                    .lock()
+                    .fonts
+                    .definitions()
+                    .font_data
+                    .contains_key(&new_font.name)
+                {
+                    update_fonts = false; // no need to update
+                }
+            }
+        });
+
+        if update_fonts {
+            self.memory_mut(|mem| mem.add_fonts.push(new_font));
         }
     }
 
@@ -2297,9 +2362,9 @@ impl ContextImpl {
                 let root_id = crate::accesskit_root_id().accesskit_id();
                 let nodes = {
                     state
-                        .node_builders
+                        .nodes
                         .into_iter()
-                        .map(|(id, builder)| (id.accesskit_id(), builder.build()))
+                        .map(|(id, node)| (id.accesskit_id(), node))
                         .collect()
                 };
                 let focus_id = self
@@ -2884,7 +2949,9 @@ impl Context {
 
         for (name, data) in &mut font_definitions.font_data {
             ui.collapsing(name, |ui| {
-                if data.tweak.ui(ui).changed() {
+                let mut tweak = data.tweak;
+                if tweak.ui(ui).changed() {
+                    Arc::make_mut(data).tweak = tweak;
                     changed = true;
                 }
             });
@@ -3206,7 +3273,7 @@ impl Context {
     pub fn accesskit_node_builder<R>(
         &self,
         id: Id,
-        writer: impl FnOnce(&mut accesskit::NodeBuilder) -> R,
+        writer: impl FnOnce(&mut accesskit::Node) -> R,
     ) -> Option<R> {
         self.write(|ctx| {
             ctx.viewport()
