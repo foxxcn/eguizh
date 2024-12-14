@@ -26,6 +26,9 @@ mod renderer;
 pub use renderer::*;
 use wgpu::{Adapter, Device, Instance, Queue};
 
+/// Helpers for capturing screenshots of the UI.
+pub mod capture;
+
 /// Module for painting [`egui`](https://github.com/emilk/egui) with [`wgpu`] on [`winit`].
 #[cfg(feature = "winit")]
 pub mod winit;
@@ -159,10 +162,14 @@ impl RenderState {
                     );
                 }
 
+                let trace_path = std::env::var("WGPU_TRACE");
                 let (device, queue) = {
                     crate::profile_scope!("request_device");
                     adapter
-                        .request_device(&(*device_descriptor)(&adapter), None)
+                        .request_device(
+                            &(*device_descriptor)(&adapter),
+                            trace_path.ok().as_ref().map(std::path::Path::new),
+                        )
                         .await?
                 };
 
