@@ -5,7 +5,7 @@ pub struct About {}
 
 impl crate::Demo for About {
     fn name(&self) -> &'static str {
-        "About egui"
+        crate::tr!("About egui")
     }
 
     fn show(&mut self, ctx: &egui::Context, open: &mut bool) {

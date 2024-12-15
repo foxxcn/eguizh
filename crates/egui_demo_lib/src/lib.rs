@@ -13,10 +13,19 @@
 
 mod demo;
 pub mod easy_mark;
+pub mod i18n;
 mod rendering_test;
+pub use i18n::{I18nManager, Language};
 
 pub use demo::{Demo, DemoWindows, View, WidgetGallery};
 pub use rendering_test::ColorTest;
+
+#[macro_export]
+macro_rules! tr {
+    ($text:expr) => {
+        $crate::i18n::I18nManager::tr($text)
+    };
+}
 
 /// View some Rust code with syntax highlighting and selection.
 pub(crate) fn rust_view_ui(ui: &mut egui::Ui, code: &str) {

@@ -1,4 +1,5 @@
 use egui_demo_lib::is_mobile;
+use egui_demo_lib::{tr, I18nManager, Language};
 
 #[cfg(feature = "glow")]
 use eframe::glow;
@@ -398,6 +399,24 @@ impl WrapApp {
 
     fn bar_contents(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame, cmd: &mut Command) {
         egui::widgets::global_theme_preference_switch(ui);
+
+        ui.separator();
+
+        ui.menu_button(tr!("Language"), |ui| {
+            let current_lang = I18nManager::current_language();
+
+            for lang in [Language::English, Language::Chinese] {
+                let label = match lang {
+                    Language::English => "English",
+                    Language::Chinese => "中文",
+                };
+
+                if ui.selectable_label(current_lang == lang, label).clicked() {
+                    I18nManager::set_global_language(lang);
+                    ui.close_menu();
+                }
+            }
+        });
 
         ui.separator();
 
