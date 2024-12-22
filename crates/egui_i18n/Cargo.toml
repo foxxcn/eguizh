@@ -25,8 +25,12 @@ default = ["persistence"]
 persistence = ["serde", "egui/serde"]
 
 [dependencies]
+egui = { workspace = true, default-features = false }
 once_cell = { workspace = true }
 parking_lot = { workspace = true }
+log = { workspace = true }
+serde = { workspace = true, optional = true }
+document-features = { workspace = true, optional = true }
 
 [dev-dependencies]
 egui_demo_lib = { workspace = true }
