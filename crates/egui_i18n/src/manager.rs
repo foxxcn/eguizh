@@ -22,6 +22,7 @@ use parking_lot::Mutex;
 use std::collections::HashMap;
 
 static I18N: Lazy<Mutex<I18nManager>> = Lazy::new(|| Mutex::new(I18nManager::new()));
+
 /// Manages internationalization (i18n) for the application.
 ///
 /// # Adding support for a new language
