@@ -1340,9 +1340,8 @@ dependencies = [
  "document-features",
  "egui",
  "egui_extras",
+ "egui_i18n",
  "egui_kittest",
- "once_cell",
- "parking_lot",
  "serde",
  "unicode_names2",
  "wgpu",
@@ -1385,6 +1384,19 @@ dependencies = [
  "wasm-bindgen",
  "web-sys",
  "winit",
+]
+
+[[package]]
+name = "egui_i18n"
+version = "0.30.0"
+dependencies = [
+ "document-features",
+ "egui",
+ "egui_demo_lib",
+ "log",
+ "once_cell",
+ "parking_lot",
+ "serde",
 ]
 
 [[package]]

@@ -1,0 +1,36 @@
+[package]
+name = "egui_i18n"
+version.workspace = true
+authors = ["Foxxcn <foxxcnweb@gmail.com>"]
+description = "Internationalization support for egui applications"
+edition.workspace = true
+rust-version.workspace = true
+homepage = "https://github.com/foxxcn/eguizh"
+license.workspace = true
+readme = "README.md"
+repository = "https://github.com/emilk/egui/tree/master/crates/egui-i18n"
+categories = ["gui", "internationalization"]
+keywords = ["egui", "i18n", "translation", "language"]
+include = ["../LICENSE-APACHE", "../LICENSE-MIT", "**/*.rs", "Cargo.toml"]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--generate-link-to-definition"]
+
+[features]
+default = ["persistence"]
+persistence = ["serde", "egui/serde"]
+
+[dependencies]
+egui = { workspace = true, default-features = false }
+once_cell = { workspace = true }
+parking_lot = { workspace = true }
+log = { workspace = true }
+serde = { workspace = true, optional = true }
+document-features = { workspace = true, optional = true }
+
+[dev-dependencies]
+egui_demo_lib = { workspace = true }

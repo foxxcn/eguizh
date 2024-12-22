@@ -13,6 +13,7 @@ members = [
     "crates/emath",
     "crates/epaint",
     "crates/epaint_default_fonts",
+    "crates/egui_i18n",
 
     "examples/*",
     "tests/*",
@@ -67,6 +68,7 @@ egui_demo_lib = { version = "0.30.0", path = "crates/egui_demo_lib", default-fea
 egui_glow = { version = "0.30.0", path = "crates/egui_glow", default-features = false }
 egui_kittest = { version = "0.30.0", path = "crates/egui_kittest", default-features = false }
 eframe = { version = "0.30.0", path = "crates/eframe", default-features = false }
+egui_i18n = { version = "0.30.0", path = "crates/egui_i18n", default-features = false }
 
 ahash = { version = "0.8.11", default-features = false, features = [
     "no-rng", # we don't need DOS-protection, so we let users opt-in to it instead
@@ -102,6 +104,7 @@ web-time = "1.1.0" # Timekeeping for native and web
 wgpu = { version = "23.0.0", default-features = false }
 windows-sys = "0.59"
 winit = { version = "0.30.5", default-features = false }
+once_cell = "1.20.2"
 
 [workspace.lints.rust]
 unsafe_code = "deny"

@@ -207,12 +207,12 @@ impl WrapApp {
     fn apps_iter_mut(&mut self) -> impl Iterator<Item = (&str, Anchor, &mut dyn eframe::App)> {
         let mut vec = vec![
             (
-                "✨ Demos",
+                tr!("✨ Demos"),
                 Anchor::Demo,
                 &mut self.state.demo as &mut dyn eframe::App,
             ),
             (
-                "🖹 EasyMark editor",
+                tr!("🖹 EasyMark editor"),
                 Anchor::EasyMarkEditor,
                 &mut self.state.easy_mark_editor as &mut dyn eframe::App,
             ),
@@ -223,7 +223,7 @@ impl WrapApp {
                 &mut self.state.http as &mut dyn eframe::App,
             ),
             (
-                "🕑 Fractal Clock",
+                tr!("🕑 Fractal Clock"),
                 Anchor::Clock,
                 &mut self.state.clock as &mut dyn eframe::App,
             ),
@@ -238,14 +238,14 @@ impl WrapApp {
         #[cfg(any(feature = "glow", feature = "wgpu"))]
         if let Some(custom3d) = &mut self.custom3d {
             vec.push((
-                "🔺 3D painting",
+                tr!("🔺 3D painting"),
                 Anchor::Custom3d,
                 custom3d as &mut dyn eframe::App,
             ));
         }
 
         vec.push((
-            "🎨 Rendering test",
+            tr!("🎨 Rendering test"),
             Anchor::Rendering,
             &mut self.state.rendering_test as &mut dyn eframe::App,
         ));
@@ -341,7 +341,7 @@ impl WrapApp {
             .show_animated(ctx, is_open, |ui| {
                 ui.add_space(4.0);
                 ui.vertical_centered(|ui| {
-                    ui.heading("💻 Backend");
+                    ui.heading(tr!("💻 Backend"));
                 });
 
                 ui.separator();
@@ -402,17 +402,15 @@ impl WrapApp {
 
         ui.separator();
 
-        ui.menu_button(tr!("Language"), |ui| {
+        ui.menu_button(tr!("🌏 Language"), |ui| {
             let current_lang = I18nManager::current_language();
 
-            for lang in [Language::English, Language::Chinese] {
-                let label = match lang {
-                    Language::English => "English",
-                    Language::Chinese => "中文",
-                };
-
-                if ui.selectable_label(current_lang == lang, label).clicked() {
-                    I18nManager::set_global_language(lang);
+            for lang in Language::available_languages() {
+                if ui
+                    .selectable_label(current_lang == *lang, lang.display_name())
+                    .clicked()
+                {
+                    I18nManager::set_global_language(*lang);
                     ui.close_menu();
                 }
             }
@@ -421,12 +419,12 @@ impl WrapApp {
         ui.separator();
 
         if is_mobile(ui.ctx()) {
-            ui.menu_button("💻 Backend", |ui| {
+            ui.menu_button(tr!("💻 Backend"), |ui| {
                 ui.set_style(ui.ctx().style()); // ignore the "menu" style set by `menu_button`.
                 self.backend_panel_contents(ui, frame, cmd);
             });
         } else {
-            ui.toggle_value(&mut self.state.backend_panel.open, "💻 Backend");
+            ui.toggle_value(&mut self.state.backend_panel.open, tr!("💻 Backend"));
         }
 
         ui.separator();
