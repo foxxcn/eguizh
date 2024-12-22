@@ -24,6 +24,9 @@ rustdoc-args = ["--generate-link-to-definition"]
 default = ["persistence"]
 persistence = ["serde", "egui/serde"]
 
+[package.metadata.cargo-machete]
+ignored = ["document-features", "egui", "log", "serde"]
+
 [dependencies]
 egui = { workspace = true, default-features = false }
 once_cell = { workspace = true }
