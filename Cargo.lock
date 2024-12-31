@@ -1309,6 +1309,7 @@ dependencies = [
 name = "egui_demo_app"
 version = "0.30.0"
 dependencies = [
+ "android_logger",
  "bytemuck",
  "chrono",
  "eframe",
@@ -1329,6 +1330,7 @@ dependencies = [
  "wasm-bindgen-futures",
  "web-sys",
  "wgpu",
+ "winit",
 ]
 
 [[package]]
