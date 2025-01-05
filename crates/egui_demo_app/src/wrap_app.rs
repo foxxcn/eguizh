@@ -236,7 +236,7 @@ impl WrapApp {
             ),
             #[cfg(feature = "image_viewer")]
             (
-                "🖼 Image Viewer",
+                tr!("🖼 Image Viewer"),
                 Anchor::ImageViewer,
                 &mut self.state.image_viewer as &mut dyn eframe::App,
             ),
@@ -380,7 +380,7 @@ impl WrapApp {
 
         ui.horizontal(|ui| {
             if ui
-                .button("Reset egui")
+                .button(tr!("Reset egui"))
                 .on_hover_text("Forget scroll, positions, sizes etc")
                 .clicked()
             {
@@ -388,7 +388,7 @@ impl WrapApp {
                 ui.close_menu();
             }
 
-            if ui.button("Reset everything").clicked() {
+            if ui.button(tr!("Reset everything")).clicked() {
                 *cmd = Command::ResetEverything;
                 ui.close_menu();
             }
