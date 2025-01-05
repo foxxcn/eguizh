@@ -101,3 +101,6 @@ web-sys.workspace = true
 
 [package.metadata.android]
 build_targets = ["armv7-linux-androideabi", "aarch64-linux-android"]
+
+[dev-dependencies]
+egui_kittest = { workspace = true, features = ["eframe", "snapshot", "wgpu"] }
