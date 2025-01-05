@@ -8,11 +8,11 @@ pub fn get_translations() -> std::collections::HashMap<&'static str, &'static st
     let mut trans = std::collections::HashMap::new();
 
     // 菜单栏
-    trans.insert("egui demo app", "egui 演示应用");
     trans.insert("🌏 Language", "🌏 语言");
     trans.insert("💻 Backend", "💻 后台");
     trans.insert("✨ Demos", "✨ 演示");
     trans.insert("🖹 EasyMark editor", "🖹 EasyMark 编辑器");
+    trans.insert("🖼 Image Viewer", "🖼 图像查看器");
     trans.insert("🕑 Fractal Clock", "🕑 分形时钟");
     trans.insert("🔺 3D painting", "🔺 3D 绘画");
     trans.insert("🎨 Rendering test", "🎨 渲染测试");
@@ -32,6 +32,8 @@ pub fn get_translations() -> std::collections::HashMap<&'static str, &'static st
     trans.insert("Cancel", "取消");
     trans.insert("OK", "确定");
     trans.insert("Reset", "重置");
+    trans.insert("Reset egui", "重置 egui");
+    trans.insert("Reset everything", "重置所有");
 
     trans
 }
