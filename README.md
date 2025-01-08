@@ -129,10 +129,11 @@ Light Theme:
 
 `egui` has a minimal set of default dependencies:
 
-- [`ab_glyph`](https://crates.io/crates/ab_glyph)
-- [`ahash`](https://crates.io/crates/ahash)
-- [`nohash-hasher`](https://crates.io/crates/nohash-hasher)
-- [`parking_lot`](https://crates.io/crates/parking_lot)
+* [`ab_glyph`](https://crates.io/crates/ab_glyph)
+* [`ahash`](https://crates.io/crates/ahash)
+* [`bitflags`](https://crates.io/crates/bitflags)
+* [`nohash-hasher`](https://crates.io/crates/nohash-hasher)
+* [`parking_lot`](https://crates.io/crates/parking_lot)
 
 Heavier dependencies are kept out of `egui`, even as opt-in.
 No code that isn't fully Wasm-friendly is part of `egui`.
