@@ -33,15 +33,6 @@ pub fn highlight(
     // performing it at a separate thread (ctx, ctx.style()) can be used and when ui is available
     // (ui.ctx(), ui.style()) can be used
 
-    impl egui::cache::ComputerMut<(&egui::FontId, &CodeTheme, &str, &str), LayoutJob> for Highlighter {
-        fn compute(
-            &mut self,
-            (font_id, theme, code, lang): (&egui::FontId, &CodeTheme, &str, &str),
-        ) -> LayoutJob {
-            self.highlight(font_id.clone(), theme, code, lang)
-        }
-    }
-
     type HighlightCache = egui::cache::FrameCache<LayoutJob, Highlighter>;
 
     let font_id = style
@@ -54,6 +45,15 @@ pub fn highlight(
             .cache::<HighlightCache>()
             .get((&font_id, theme, code, language))
     })
+}
+
+impl egui::cache::ComputerMut<(&egui::FontId, &CodeTheme, &str, &str), LayoutJob> for Highlighter {
+    fn compute(
+        &mut self,
+        (font_id, theme, code, lang): (&egui::FontId, &CodeTheme, &str, &str),
+    ) -> LayoutJob {
+        self.highlight(font_id.clone(), theme, code, lang)
+    }
 }
 
 fn monospace_font_size(style: &egui::Style) -> f32 {

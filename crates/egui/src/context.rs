@@ -3407,7 +3407,7 @@ impl Context {
         // Try most recently added loaders first (hence `.rev()`)
         for loader in bytes_loaders.iter().rev() {
             match loader.load(self, uri) {
-                Err(load::LoadError::NotSupported) => continue,
+                Err(load::LoadError::NotSupported) => {}
                 result => return result,
             }
         }
@@ -3449,10 +3449,9 @@ impl Context {
         // Try most recently added loaders first (hence `.rev()`)
         for loader in image_loaders.iter().rev() {
             match loader.load(self, uri, size_hint) {
-                Err(load::LoadError::NotSupported) => continue,
+                Err(load::LoadError::NotSupported) => {}
                 Err(load::LoadError::FormatNotSupported { detected_format }) => {
                     format = format.or(detected_format);
-                    continue;
                 }
                 result => return result,
             }
@@ -3495,7 +3494,7 @@ impl Context {
         // Try most recently added loaders first (hence `.rev()`)
         for loader in texture_loaders.iter().rev() {
             match loader.load(self, uri, texture_options, size_hint) {
-                Err(load::LoadError::NotSupported) => continue,
+                Err(load::LoadError::NotSupported) => {}
                 result => return result,
             }
         }

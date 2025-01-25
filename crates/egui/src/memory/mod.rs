@@ -1279,7 +1279,7 @@ impl Areas {
         self.order
             .iter()
             .filter(|layer| layer.order == order && !self.is_sublayer(layer))
-            .last()
+            .next_back()
             .copied()
     }
 
