@@ -136,7 +136,7 @@ Light Theme:
 * [`parking_lot`](https://crates.io/crates/parking_lot)
 
 Heavier dependencies are kept out of `egui`, even as opt-in.
-No code that isn't fully Wasm-friendly is part of `egui`.
+All code in `egui` is Wasm-friendly (even outside a browser).
 
 To load images into `egui` you can use the official [`egui_extras`](https://github.com/foxxcn/eguizh/tree/master/crates/egui_extras) crate.
 
