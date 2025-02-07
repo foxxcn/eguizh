@@ -23,6 +23,7 @@ pub struct WidgetGallery {
     #[cfg_attr(feature = "serde", serde(skip))]
     date: Option<chrono::NaiveDate>,
 
+    #[cfg(feature = "chrono")]
     with_date_button: bool,
 }
 
@@ -47,6 +48,7 @@ impl Default for WidgetGallery {
 }
 
 impl WidgetGallery {
+    #[allow(unused_mut)] // if not chrono
     #[inline]
     pub fn with_date_button(mut self, _with_date_button: bool) -> Self {
         #[cfg(feature = "chrono")]
