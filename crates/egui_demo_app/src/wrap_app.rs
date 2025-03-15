@@ -385,12 +385,12 @@ impl WrapApp {
                 .clicked()
             {
                 ui.ctx().memory_mut(|mem| *mem = Default::default());
-                ui.close_menu();
+                ui.close();
             }
 
             if ui.button(tr!("Reset everything")).clicked() {
                 *cmd = Command::ResetEverything;
-                ui.close_menu();
+                ui.close();
             }
         });
     }
@@ -418,7 +418,7 @@ impl WrapApp {
                     .clicked()
                 {
                     I18nManager::set_global_language(*lang);
-                    ui.close_menu();
+                    ui.close();
                 }
             }
         });

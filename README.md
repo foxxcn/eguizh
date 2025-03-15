@@ -36,7 +36,7 @@ ui.label(format!("Hello '{name}', age {age}"));
 ui.image(egui::include_image!("ferris.png"));
 ```
 
-<img alt="Dark mode" src="media/demo.gif"> &nbsp; &nbsp; <img alt="Light mode" src="media/demo_light_mode.png" height="278">
+<img alt="Dark mode" src="https://github.com/user-attachments/assets/3b446d29-99d8-4c82-86bb-4d8ef0516017"> &nbsp; &nbsp; <img alt="Light mode" src="https://github.com/user-attachments/assets/a5e7da93-89a8-4ba0-86b8-0fa2228a4f62" height="278">
 
 ## Sections:
 
@@ -119,11 +119,11 @@ egui is in active development. It works well for what it does, but it lacks many
 Check out the [3rd party egui crates wiki](https://github.com/emilk/egui/wiki/3rd-party-egui-crates) for even more
 widgets and features, maintained by the community.
 
-<img src="media/widget_gallery_0.23.gif" width="50%">
+<img src="https://github.com/user-attachments/assets/13e73b76-e456-42bd-8ec9-220802834268" width="50%">
 
 Light Theme:
 
-<img src="media/widget_gallery_0.23_light.png" width="50%">
+<img src="https://github.com/user-attachments/assets/2e38972c-a444-4894-b32f-47a2719cf369" width="50%">
 
 ## Dependencies
 
@@ -255,7 +255,7 @@ This is not yet as powerful as say CSS, [but this is going to improve](https://g
 
 Here is an example (from https://github.com/a-liashenko/TinyPomodoro):
 
-<img src="media/pompodoro-skin.png" width="50%">
+<img src="https://github.com/user-attachments/assets/e6107237-2547-41d6-996b-9a20ae0345ab" width="50%">
 
 ### How do I use egui with `async`?
 

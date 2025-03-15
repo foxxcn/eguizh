@@ -434,7 +434,7 @@ impl Window<'_> {
     ) -> Option<InnerResponse<Option<R>>> {
         let Window {
             title,
-            open,
+            mut open,
             area,
             frame,
             resize,
@@ -634,7 +634,7 @@ impl Window<'_> {
                     title_bar.ui(
                         &mut area_content_ui,
                         &content_response,
-                        open,
+                        open.as_deref_mut(),
                         &mut collapsing,
                         collapsible,
                     );
@@ -649,6 +649,12 @@ impl Window<'_> {
         };
 
         let full_response = area.end(ctx, area_content_ui);
+
+        if full_response.should_close() {
+            if let Some(open) = open {
+                *open = false;
+            }
+        }
 
         let inner_response = InnerResponse {
             inner: content_inner,
@@ -1211,7 +1217,7 @@ impl TitleBar {
             let button_rect = Rect::from_center_size(button_center, button_size);
             let button_rect = button_rect.round_ui();
 
-            ui.allocate_new_ui(UiBuilder::new().max_rect(button_rect), |ui| {
+            ui.scope_builder(UiBuilder::new().max_rect(button_rect), |ui| {
                 collapsing.show_default_button_with_size(ui, button_size);
             });
         }

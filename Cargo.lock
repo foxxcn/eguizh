@@ -713,9 +713,9 @@ checksum = "37b2a672a2cb129a2e41c10b1224bb368f9f37a2b16b612598138befd7b37eb5"
 
 [[package]]
 name = "cc"
-version = "1.1.31"
+version = "1.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2e7962b54006dcfcc61cb72735f4d89bb97061dd6a7ed882ec6b8ee53714c6f"
+checksum = "be714c154be609ec7f5dad223a33bf1482fff90472de28f7362806e6d4832b8c"
 dependencies = [
  "jobserver",
  "libc",
@@ -1197,7 +1197,7 @@ checksum = "f25c0e292a7ca6d6498557ff1df68f32c99850012b6ea401cf8daf771f22ff53"
 
 [[package]]
 name = "ecolor"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "bytemuck",
  "cint",
@@ -1209,7 +1209,7 @@ dependencies = [
 
 [[package]]
 name = "eframe"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "ahash",
  "bytemuck",
@@ -1249,7 +1249,7 @@ dependencies = [
 
 [[package]]
 name = "egui"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "accesskit",
  "ahash",
@@ -1267,7 +1267,7 @@ dependencies = [
 
 [[package]]
 name = "egui-wgpu"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "ahash",
  "bytemuck",
@@ -1285,7 +1285,7 @@ dependencies = [
 
 [[package]]
 name = "egui-winit"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "accesskit_winit",
  "ahash",
@@ -1306,7 +1306,7 @@ dependencies = [
 
 [[package]]
 name = "egui_demo_app"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "android_logger",
  "bytemuck",
@@ -1335,7 +1335,7 @@ dependencies = [
 
 [[package]]
 name = "egui_demo_lib"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "chrono",
  "criterion",
@@ -1350,7 +1350,7 @@ dependencies = [
 
 [[package]]
 name = "egui_extras"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "ahash",
  "chrono",
@@ -1369,7 +1369,7 @@ dependencies = [
 
 [[package]]
 name = "egui_glow"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "ahash",
  "bytemuck",
@@ -1389,7 +1389,7 @@ dependencies = [
 
 [[package]]
 name = "egui_i18n"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "document-features",
  "egui",
@@ -1402,13 +1402,14 @@ dependencies = [
 
 [[package]]
 name = "egui_kittest"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "dify",
  "document-features",
  "eframe",
  "egui",
  "egui-wgpu",
+ "egui_extras",
  "image",
  "kittest",
  "pollster 0.4.0",
@@ -1437,7 +1438,7 @@ checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
 
 [[package]]
 name = "emath"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "bytemuck",
  "document-features",
@@ -1528,7 +1529,7 @@ dependencies = [
 
 [[package]]
 name = "epaint"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "ab_glyph",
  "ahash",
@@ -1549,7 +1550,7 @@ dependencies = [
 
 [[package]]
 name = "epaint_default_fonts"
-version = "0.31.0"
+version = "0.31.1"
 
 [[package]]
 name = "equivalent"
@@ -2414,7 +2415,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4979f22fdb869068da03c9f7528f8297c6fd2606bc3a4affe42e6a823fdb8da4"
 dependencies = [
  "cfg-if",
- "windows-targets 0.52.6",
+ "windows-targets 0.48.5",
 ]
 
 [[package]]
@@ -3115,7 +3116,7 @@ checksum = "2f3a9f18d041e6d0e102a0a46750538147e5e8992d3b4873aaafee2520b00ce3"
 
 [[package]]
 name = "popups"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
  "eframe",
  "env_logger",
@@ -3450,15 +3451,14 @@ dependencies = [
 
 [[package]]
 name = "ring"
-version = "0.17.8"
+version = "0.17.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c17fa4cb658e3583423e915b9f3acc01cceaee1860e33d59ebae66adc3a2dc0d"
+checksum = "a4689e6c2294d81e88dc6261c768b63bc4fcdb852be6d1352498b114f61383b7"
 dependencies = [
  "cc",
  "cfg-if",
  "getrandom",
  "libc",
- "spin",
  "untrusted",
  "windows-sys 0.52.0",
 ]
@@ -3760,12 +3760,6 @@ checksum = "dd538fb6910ac1099850255cf94a94df6551fbdd602454387d0adb2d1ca6dead"
 dependencies = [
  "serde",
 ]
-
-[[package]]
-name = "spin"
-version = "0.9.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
 
 [[package]]
 name = "spirv"
@@ -5121,7 +5115,7 @@ checksum = "ec7a2a501ed189703dba8b08142f057e887dfc4b2cc4db2d343ac6376ba3e0b9"
 
 [[package]]
 name = "xtask"
-version = "0.31.0"
+version = "0.31.1"
 
 [[package]]
 name = "yaml-rust"

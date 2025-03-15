@@ -505,6 +505,7 @@ impl TextEdit<'_> {
             .unwrap_or_else(|| ui.visuals().widgets.inactive.text_color());
 
         let prev_text = text.as_str().to_owned();
+        let hint_text_str = hint_text.text().to_owned();
 
         let font_id = font_selection.resolve(ui.style());
         let row_height = ui.fonts(|f| f.row_height(&font_id));
@@ -729,14 +730,17 @@ impl TextEdit<'_> {
                 }
             }
 
-            // Allocate additional space if edits were made this frame that changed the size. This is important so that,
-            // if there's a ScrollArea, it can properly scroll to the cursor.
-            let extra_size = galley.size() - rect.size();
-            if extra_size.x > 0.0 || extra_size.y > 0.0 {
-                ui.allocate_rect(
-                    Rect::from_min_size(outer_rect.max, extra_size),
-                    Sense::hover(),
-                );
+            if !clip_text {
+                // Allocate additional space if edits were made this frame that changed the size. This is important so that,
+                // if there's a ScrollArea, it can properly scroll to the cursor.
+                // Condition `!clip_text` is important to avoid breaking layout for `TextEdit::singleline` (PR #5640)
+                let extra_size = galley.size() - rect.size();
+                if extra_size.x > 0.0 || extra_size.y > 0.0 {
+                    ui.allocate_rect(
+                        Rect::from_min_size(outer_rect.max, extra_size),
+                        Sense::hover(),
+                    );
+                }
             }
 
             painter.galley(galley_pos, galley.clone(), text_color);
@@ -807,6 +811,7 @@ impl TextEdit<'_> {
                     ui.is_enabled(),
                     mask_if_password(password, prev_text.as_str()),
                     mask_if_password(password, text.as_str()),
+                    hint_text_str.as_str(),
                 )
             });
         } else if selection_changed {
@@ -825,6 +830,7 @@ impl TextEdit<'_> {
                     ui.is_enabled(),
                     mask_if_password(password, prev_text.as_str()),
                     mask_if_password(password, text.as_str()),
+                    hint_text_str.as_str(),
                 )
             });
         }

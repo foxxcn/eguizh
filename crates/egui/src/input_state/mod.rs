@@ -362,6 +362,14 @@ impl InputState {
                 Event::Zoom(factor) => {
                     zoom_factor_delta *= *factor;
                 }
+                Event::WindowFocused(false) => {
+                    // Example: pressing `Cmd+S` brings up a save-dialog (e.g. using rfd),
+                    // but we get no key-up event for the `S` key (in winit).
+                    // This leads to `S` being mistakenly marked as down when we switch back to the app.
+                    // So we take the safe route and just clear all the keys and modifiers when
+                    // the app loses focus.
+                    keys_down.clear();
+                }
                 _ => {}
             }
         }
@@ -1324,6 +1332,18 @@ impl PointerState {
     #[inline(always)]
     pub fn middle_down(&self) -> bool {
         self.button_down(PointerButton::Middle)
+    }
+
+    /// Is the mouse moving in the direction of the given rect?
+    pub fn is_moving_towards_rect(&self, rect: &Rect) -> bool {
+        if self.is_still() {
+            return false;
+        }
+
+        if let Some(pos) = self.hover_pos() {
+            return rect.intersects_ray(pos, self.direction());
+        }
+        false
     }
 }
 
