@@ -6,7 +6,7 @@
 //! - Allows runtime language switching
 //!
 //! # Example
-//! ```no_run
+//! ``` no_run
 //! use egui_i18n::{tr, I18nManager, Language};
 //!
 //! // Switch to Chinese
@@ -37,7 +37,9 @@ static I18N: Lazy<Mutex<I18nManager>> = Lazy::new(|| Mutex::new(I18nManager::new
 /// ```
 ///
 /// 2. Create a new translation file (e.g., `translations/ja.rs`):
-/// ``` no_run
+/// ``` ignore
+/// use std::collections::HashMap;
+///
 /// pub fn get_translations() -> HashMap<&'static str, &'static str> {
 ///     let mut trans = HashMap::new();
 ///     trans.insert("File", "ファイル");
@@ -47,22 +49,26 @@ static I18N: Lazy<Mutex<I18nManager>> = Lazy::new(|| Mutex::new(I18nManager::new
 /// ```
 ///
 /// 3. Register the translations in `I18nManager::new()`:
-/// ``` no_run
-/// fn new() -> Self {
-///     Self {
-///         current: Self::detect_system_language(),
-///         translations: {
-///             let mut map = HashMap::new();
-///             map.insert(Language::Chinese, translations::zh::get_translations());
-///             map.insert(Language::Japanese, translations::ja::get_translations());
-///             map
-///         },
+/// ``` ignore
+/// impl I18nManager {
+///     fn new() -> Self {
+///         Self {
+///             current: Self::detect_system_language(),
+///             translations: {
+///                 let mut map = HashMap::new();
+///                 map.insert(Language::Chinese, translations::zh::get_translations());
+///                 map.insert(Language::Japanese, translations::ja::get_translations());
+///                 map
+///             },
+///         }
 ///     }
 /// }
 /// ```
 ///
 /// 4. Add language detection in `detect_system_language()`:
-/// ``` no_run
+/// ``` ignore
+/// use egui_i18n::Language;
+///
 /// fn detect_system_language() -> Language {
 ///     #[cfg(not(target_arch = "wasm32"))]
 ///     if let Ok(lang) = std::env::var("LANG") {

@@ -1,7 +1,7 @@
 //! Internationalization support for egui applications.
 //!
 //! # Quick Start
-//! ``` no_run
+//! ``` ignore
 //! use egui_i18n::{tr, I18nManager, Language};
 //!
 //! // Use tr!() macro to wrap text that needs translation

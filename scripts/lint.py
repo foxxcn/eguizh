@@ -10,7 +10,7 @@ import sys
 
 
 def lint_file_path(filepath, args) -> int:
-    with open(filepath) as f:
+    with open(filepath, encoding='utf-8') as f:
         lines_in = f.readlines()
 
     errors, lines_out = lint_lines(filepath, lines_in)
@@ -19,7 +19,7 @@ def lint_file_path(filepath, args) -> int:
         print(error)
 
     if args.fix and lines_in != lines_out:
-        with open(filepath, "w") as f:
+        with open(filepath, "w", encoding='utf-8') as f:
             f.writelines(lines_out)
         print(f"{filepath} fixed.")
 

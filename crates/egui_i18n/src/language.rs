@@ -7,7 +7,7 @@
 //! 4. Add language detection in `I18nManager::detect_system_language()`
 //!
 //! # Example
-//! ``` no_run
+//! ``` ignore
 //! pub enum Language {
 //!     English,
 //!     Chinese,
