@@ -17,7 +17,7 @@ avoid-breaking-exported-api = false
 max-fn-params-bools = 2 # TODO(emilk): decrease this to 1
 
 # https://rust-lang.github.io/rust-clippy/master/index.html#/large_include_file
-max-include-file-size = 1000000
+max-include-file-size = 30000000
 
 # https://rust-lang.github.io/rust-clippy/master/index.html#/type_complexity
 type-complexity-threshold = 350

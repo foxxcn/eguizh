@@ -33,7 +33,6 @@ pub const NOTO_EMOJI_REGULAR: &[u8] = include_bytes!("../fonts/NotoEmoji-Regular
 /// the Ubuntu brand that convey a precise, reliable and free attitude.
 ///
 /// See [Ubuntu design](https://design.ubuntu.com/font) for more information.
-#[allow(clippy::large_include_file)]
 pub const SOURCEHANCN_VF: &[u8] = include_bytes!("../fonts/SourceHanSerifCN-VF.ttf");
 
 /// An experimental typeface that uses standardized
