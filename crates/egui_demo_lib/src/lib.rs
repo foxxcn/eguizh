@@ -37,7 +37,7 @@ macro_rules! egui_github_link_file {
     };
     ($label: expr) => {
         egui::github_link_file!(
-            "https://github.com/emilk/egui/blob/master/",
+            "https://github.com/emilk/egui/blob/main/",
             egui::RichText::new($label).small()
         )
     };
@@ -51,7 +51,7 @@ macro_rules! egui_github_link_file_line {
     };
     ($label: expr) => {
         egui::github_link_file_line!(
-            "https://github.com/emilk/egui/blob/master/",
+            "https://github.com/emilk/egui/blob/main/",
             egui::RichText::new($label).small()
         )
     };
