@@ -146,32 +146,32 @@ pub type Result<T, E = LoadError> = std::result::Result<T, E>;
 /// The size is measured in texels, with the pixels per point already factored in.
 ///
 /// All variants will preserve the original aspect ratio.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum SizeHint {
     /// Scale original size by some factor.
     Scale(OrderedFloat<f32>),
 
-    /// Scale to width.
+    /// Scale to exactly this pixel width, keeping the original aspect ratio.
     Width(u32),
 
-    /// Scale to height.
+    /// Scale to exactly this pixel height, keeping the original aspect ratio.
     Height(u32),
 
-    /// Scale to size.
-    Size(u32, u32),
+    /// Scale to this pixel size.
+    Size {
+        width: u32,
+        height: u32,
+
+        /// If true, the image will be as large as possible
+        /// while still fitting within the given width/height.
+        maintain_aspect_ratio: bool,
+    },
 }
 
 impl Default for SizeHint {
     #[inline]
     fn default() -> Self {
         Self::Scale(1.0.ord())
-    }
-}
-
-impl From<Vec2> for SizeHint {
-    #[inline]
-    fn from(value: Vec2) -> Self {
-        Self::Size(value.x.round() as u32, value.y.round() as u32)
     }
 }
 
@@ -322,8 +322,8 @@ pub trait BytesLoader {
 
     /// Implementations may use this to perform work at the end of a frame,
     /// such as evicting unused entries from a cache.
-    fn end_pass(&self, frame_index: usize) {
-        let _ = frame_index;
+    fn end_pass(&self, pass_index: u64) {
+        let _ = pass_index;
     }
 
     /// If the loader caches any data, this should return the size of that cache.
@@ -394,15 +394,15 @@ pub trait ImageLoader {
 
     /// Implementations may use this to perform work at the end of a pass,
     /// such as evicting unused entries from a cache.
-    fn end_pass(&self, frame_index: usize) {
-        let _ = frame_index;
+    fn end_pass(&self, pass_index: u64) {
+        let _ = pass_index;
     }
 
     /// If the loader caches any data, this should return the size of that cache.
     fn byte_size(&self) -> usize;
 
     /// Returns `true` if some image is currently being loaded.
-    ///  
+    ///
     /// NOTE: You probably also want to check [`BytesLoader::has_pending`].
     fn has_pending(&self) -> bool {
         false
@@ -413,6 +413,8 @@ pub trait ImageLoader {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct SizedTexture {
     pub id: TextureId,
+
+    /// Size in logical ui points.
     pub size: Vec2,
 }
 
@@ -539,8 +541,8 @@ pub trait TextureLoader {
 
     /// Implementations may use this to perform work at the end of a pass,
     /// such as evicting unused entries from a cache.
-    fn end_pass(&self, frame_index: usize) {
-        let _ = frame_index;
+    fn end_pass(&self, pass_index: u64) {
+        let _ = pass_index;
     }
 
     /// If the loader caches any data, this should return the size of that cache.
@@ -569,6 +571,29 @@ impl Default for Loaders {
             // By default we only include `DefaultTextureLoader`.
             texture: Mutex::new(vec![Arc::new(DefaultTextureLoader::default())]),
             include,
+        }
+    }
+}
+
+impl Loaders {
+    /// The given pass has just ended.
+    pub fn end_pass(&self, pass_index: u64) {
+        let Self {
+            include,
+            bytes,
+            image,
+            texture,
+        } = self;
+
+        include.end_pass(pass_index);
+        for loader in bytes.lock().iter() {
+            loader.end_pass(pass_index);
+        }
+        for loader in image.lock().iter() {
+            loader.end_pass(pass_index);
+        }
+        for loader in texture.lock().iter() {
+            loader.end_pass(pass_index);
         }
     }
 }

@@ -2,7 +2,6 @@
 
 use std::{borrow::Cow, cell::RefCell, panic::Location, sync::Arc, time::Duration};
 
-use containers::area::AreaState;
 use emath::GuiRounding as _;
 use epaint::{
     emath::{self, TSTransform},
@@ -17,7 +16,7 @@ use epaint::{
 
 use crate::{
     animation_manager::AnimationManager,
-    containers,
+    containers::{self, area::AreaState},
     data::output::PlatformOutput,
     epaint, hit_test,
     input_state::{InputState, MultiTouchInfo, PointerEvent},
@@ -2316,6 +2315,8 @@ impl ContextImpl {
         let viewport = self.viewports.entry(ended_viewport_id).or_default();
         let pixels_per_point = viewport.input.pixels_per_point;
 
+        self.loaders.end_pass(viewport.repaint.cumulative_pass_nr);
+
         viewport.repaint.cumulative_pass_nr += 1;
 
         self.memory.end_pass(&viewport.this_pass.used_ids);
@@ -3063,6 +3064,12 @@ impl Context {
                 self.texture_ui(ui);
             });
 
+        CollapsingHeader::new("🖼 Image loaders")
+            .default_open(false)
+            .show(ui, |ui| {
+                self.loaders_ui(ui);
+            });
+
         CollapsingHeader::new("🔠 Font texture")
             .default_open(false)
             .show(ui, |ui| {
@@ -3107,6 +3114,8 @@ impl Context {
         ));
         let max_preview_size = vec2(48.0, 32.0);
 
+        let pixels_per_point = self.pixels_per_point();
+
         ui.group(|ui| {
             ScrollArea::vertical()
                 .max_height(300.0)
@@ -3121,15 +3130,16 @@ impl Context {
                         .show(ui, |ui| {
                             for (&texture_id, meta) in textures {
                                 let [w, h] = meta.size;
+                                let point_size = vec2(w as f32, h as f32) / pixels_per_point;
 
-                                let mut size = vec2(w as f32, h as f32);
+                                let mut size = point_size;
                                 size *= (max_preview_size.x / size.x).min(1.0);
                                 size *= (max_preview_size.y / size.y).min(1.0);
                                 ui.image(SizedTexture::new(texture_id, size))
                                     .on_hover_ui(|ui| {
                                         // show larger on hover
                                         let max_size = 0.5 * ui.ctx().screen_rect().size();
-                                        let mut size = vec2(w as f32, h as f32);
+                                        let mut size = point_size;
                                         size *= max_size.x / size.x.max(max_size.x);
                                         size *= max_size.y / size.y.max(max_size.y);
                                         ui.image(SizedTexture::new(texture_id, size));
@@ -3143,6 +3153,73 @@ impl Context {
                         });
                 });
         });
+    }
+
+    /// Show stats about different image loaders.
+    pub fn loaders_ui(&self, ui: &mut crate::Ui) {
+        struct LoaderInfo {
+            id: String,
+            byte_size: usize,
+        }
+
+        let mut byte_loaders = vec![];
+        let mut image_loaders = vec![];
+        let mut texture_loaders = vec![];
+
+        {
+            let loaders = self.loaders();
+            let Loaders {
+                include: _,
+                bytes,
+                image,
+                texture,
+            } = loaders.as_ref();
+
+            for loader in bytes.lock().iter() {
+                byte_loaders.push(LoaderInfo {
+                    id: loader.id().to_owned(),
+                    byte_size: loader.byte_size(),
+                });
+            }
+            for loader in image.lock().iter() {
+                image_loaders.push(LoaderInfo {
+                    id: loader.id().to_owned(),
+                    byte_size: loader.byte_size(),
+                });
+            }
+            for loader in texture.lock().iter() {
+                texture_loaders.push(LoaderInfo {
+                    id: loader.id().to_owned(),
+                    byte_size: loader.byte_size(),
+                });
+            }
+        }
+
+        fn loaders_ui(ui: &mut crate::Ui, title: &str, loaders: &[LoaderInfo]) {
+            let heading = format!("{} {title} loaders", loaders.len());
+            crate::CollapsingHeader::new(heading)
+                .default_open(true)
+                .show(ui, |ui| {
+                    Grid::new("loaders")
+                        .striped(true)
+                        .num_columns(2)
+                        .show(ui, |ui| {
+                            ui.label("ID");
+                            ui.label("Size");
+                            ui.end_row();
+
+                            for loader in loaders {
+                                ui.label(&loader.id);
+                                ui.label(format!("{:.3} MB", loader.byte_size as f64 * 1e-6));
+                                ui.end_row();
+                            }
+                        });
+                });
+        }
+
+        loaders_ui(ui, "byte", &byte_loaders);
+        loaders_ui(ui, "image", &image_loaders);
+        loaders_ui(ui, "texture", &texture_loaders);
     }
 
     /// Shows the contents of [`Self::memory`].
