@@ -7,6 +7,7 @@
 [![Build Status](https://github.com/foxxcn/eguizh/workflows/Rust/badge.svg)](https://github.com/foxxcn/eguizh/actions/workflows/rust.yml)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/foxxcn/eguizh/blob/main/LICENSE-MIT)
 [![Apache](https://img.shields.io/badge/license-Apache-blue.svg)](https://github.com/foxxcn/eguizh/blob/main/LICENSE-APACHE)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/foxxcn/eguizh)
 
 ---
 
